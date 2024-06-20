@@ -15,6 +15,7 @@ contract FundMe {
     mapping(address => uint256) public addressToAmountFunded;
 
     address public owner;
+
     constructor() {
         owner = msg.sender;
     }
@@ -32,7 +33,7 @@ contract FundMe {
         addressToAmountFunded[msg.sender] = msg.value;
     }
 
-    function withdraw() public {
+    function withdraw() public onlyOwner {
         /* starting index, ending index, step amount*/
         for (
             uint256 funderIndex = 0;
@@ -58,7 +59,14 @@ contract FundMe {
         // require(sendSuccess, "Send failed");
         //call
         // https://ethereum.stackexchange.com/questions/74442/when-should-i-use-calldata-and-when-should-i-use-memory
-        (bool callSuccess, bytes memory dataReturned) = payable(msg.sender).call{value: address(this).balance}("");
+        (bool callSuccess, bytes memory dataReturned) = payable(msg.sender)
+            .call{value: address(this).balance}("");
         require(callSuccess, "Call failed");
+    }
+
+    // customizied modifier
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Sender is not owner!");
+        _;
     }
 }
