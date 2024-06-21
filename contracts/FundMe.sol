@@ -6,25 +6,26 @@ import "./PriceConverter.sol";
 // Get funds from user
 // Withdraw funds
 // set a minimum funding value in USD
+error NotOwner();
 
 contract FundMe {
     using PriceConverter for uint256;
-    uint256 public minimumUsd = 50 * 1e18;
+    uint256 public constant MINIMUM_USD = 50 * 1e18;
 
     address[] public funders;
     mapping(address => uint256) public addressToAmountFunded;
 
-    address public owner;
+    address public immutable i_owner;
 
     constructor() {
-        owner = msg.sender;
+        i_owner = msg.sender;
     }
 
     function fund() public payable {
         // want to be able to set a minimum fund amount in usd
         // require(getConversionRate(msg.value) >= minimumUsd, "Didn't send enough!"); // 1e18 == 1 * 10 * 18 = 1000000000000000000 wei = 1 eth
         require(
-            msg.value.getConversionRate() >= minimumUsd,
+            msg.value.getConversionRate() >= MINIMUM_USD,
             "Didn't send enough!"
         );
 
@@ -66,7 +67,16 @@ contract FundMe {
 
     // customizied modifier
     modifier onlyOwner() {
-        require(msg.sender == owner, "Sender is not owner!");
+        // require(msg.sender == i_owner, "Sender is not owner!"); // more gas efficient
+        if (msg.sender != i_owner) {revert NotOwner();} // Custom Errors 
         _;
+    }
+
+    receive() external payable {
+        fund();
+    }
+
+    fallback() external payable {
+        fund();
     }
 }
