@@ -1,0 +1,19 @@
+{
+  "name": "ethers-simple-storage",
+  "author": {
+    "name": "Diego Jacober",
+    "email": "diegoalencar.jacober@gmail.com"
+  },
+  "version": "0.0.0",
+  "license": "MIT",
+  "dependencies": {
+    "ethers": "^6.2.3",
+    "fs-extra": "^11.2.0",
+    "solc": "^0.8.26",
+    "sucrase": "^3.35.0"
+  },
+  "scripts": {
+    "compile": "yarn solcjs --bin --abi --include-path node_modules/ --base-path . -o . SimpleStorage.sol",
+    "deploy": "sucrase-node src/deploy.js"
+  }
+}
