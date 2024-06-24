@@ -11,21 +11,21 @@ async function main() {
     // const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
     const encryptedJson = fs.readFileSync(
       path.join(__dirname, "../.encryptedKey.json"),
-      "utf8"
+      "utf8",
     );
     let wallet = ethers.Wallet.fromEncryptedJsonSync(
       encryptedJson,
-      process.env.PRIVATE_KEY_PASSWORD
+      process.env.PRIVATE_KEY_PASSWORD,
     );
     wallet = wallet.connect(provider);
 
     const abiPath = path.join(
       __dirname,
-      "../SimpleStorage_sol_SimpleStorage.abi"
+      "../SimpleStorage_sol_SimpleStorage.abi",
     );
     const binPath = path.join(
       __dirname,
-      "../SimpleStorage_sol_SimpleStorage.bin"
+      "../SimpleStorage_sol_SimpleStorage.bin",
     );
 
     if (!fs.existsSync(abiPath) || !fs.existsSync(binPath)) {
