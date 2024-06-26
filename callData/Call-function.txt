@@ -1,0 +1,11 @@
+The easiest way to enable one contract to interact with another is by defining the target contract. Interfaces serve this purpose; for example:
+
+interface IToken {
+    function getBalance(address user) external;
+}
+ We can use this interface to properly communicate with a token contract that implements the getBalance method:
+
+// tokenAddress: a contract adddress we want to communicate with
+// userAddress: the address we want to lookup the balance for
+uint balance = IToken(tokenAddress).getBalance(userAddress);
+Behind the scenes Solidity is creating a message call that encodes the calldata for this getBalance call.

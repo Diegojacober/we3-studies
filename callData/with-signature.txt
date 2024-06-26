@@ -1,0 +1,13 @@
+As a bit of a shortcut to the previous stage, we can use the method abi.encodeWithSignature! This method will do everything we did in the last stage, in one function.
+
+// replace this:
+bytes4 memory payload = abi.encodePacked(bytes4(keccak256("rumble()")));
+
+// with this:
+bytes memory payload = abi.encodeWithSignature("rumble()");
+And if you want to add arguments, you can add them to signature and as comma separated arguments to the encodeWithSignature method. If rumble took two uint arguments, we could pass them like this:
+
+bytes memory payload = abi.encodeWithSignature("rumble(uint256,uint256)", 10, 5);
+
+(bool success, ) = hero.call(payload);
+
