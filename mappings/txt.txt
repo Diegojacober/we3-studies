@@ -1,0 +1,25 @@
+Mappings
+Mappings are an important data type in Solidity. With a mapping we can take values of one data type and map them to values of another data type.
+
+Let's consider an example. Say you wanted to track balances of a bunch of addresses:
+
+ADDRESS	BALANCE
+0xc783df8a850f42e7F7e57013759C285caa701eB6	500
+0xeAD9C93b79Ae7C1591b1FB5323BD777E86e150d4	100
+0xE5904695748fe4A84b40b3fc79De2277660BD1D3	20
+Based on what we have learned so far you might be thinking of creating an array of structs:
+
+struct Account {
+    address addr;
+    uint balance;
+}
+
+Account[] accounts;
+ This works, certainly. When we need to find an address balance we can iterate through the accounts to find the address we're looking for and retrieve the balance.
+
+However, there's a better way! We can use a mapping:
+
+mapping(address => uint) balances;
+ With a mapping each address is mapped to a unique place in memory where it stores the uint balance. Looking up the balance is as simple as providing the address to the mapping: balances[addr].
+
+ Under the hood, the storage location is found by hashing the balances variable location with the address passed in. It's a simple lookup! Much more efficient than iteration. Generally it's better to try to use a mapping first and only use an array when you realize you need to iterate.
